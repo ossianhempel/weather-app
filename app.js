@@ -3,10 +3,13 @@
 // API Key generated from Weather API: https://www.weatherapi.com/
 const apiKey = 'c9743f30e57d4c16b27210100230105';
 
-// const locationQuery = 'Stockholm';
+const locationQuery = 'Stockholm';
 
+
+// ---------- Declaring functions ----------
 
 // TODO Reference The Odin Project
+// TODO Function for..
 const getCurrentWeatherData = (locationQuery) => {
   /**
    * Documentation
@@ -30,7 +33,7 @@ const getCurrentWeatherData = (locationQuery) => {
     const currentTemp = data.current.temp_c;
     const feelsLikeC = data.current.feelslike_c;
     const humidity = data.current.humidity;
-    const chanceOfRain = data.current.chance_of_rain;
+    // const chanceOfRain = data.current.chance_of_rain; Only exists for forecast
     const windKph = data.current.wind_kph;
 
     // Return an object containing the extracted data
@@ -40,7 +43,6 @@ const getCurrentWeatherData = (locationQuery) => {
       currentTemp: currentTemp,
       feelsLike: feelsLikeC,
       humidity: humidity,
-      chanceOfRain: chanceOfRain,
       wind: windKph,
     };
   })
@@ -51,17 +53,100 @@ const getCurrentWeatherData = (locationQuery) => {
   });
 }
 
-const cleanWeatherData = (data) => {
+
+// TODO Function ...
+const getDailyForecastData = (locationQuery) => {
+
   /**
-   * 
+   * Documentation
    * 
    * 
    */
-  return dataObject;
-}
+
+  // URL for accessing the API
+  const endpoint = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationQuery}&days=7`;
+
+  // Make API call that returns a promise created by fetch
+  return fetch(endpoint, { mode: 'cors' })
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      const forecastData = [];
+
+      // Loop through the forecast days and extract the relevant data
+      for (let i = 0; i < data.forecast.forecastday.length; i++) {
+        const forecastDay = data.forecast.forecastday[i];
+        const date = forecastDay.date;
+        const maxTemp = forecastDay.day.maxtemp_c;
+        const minTemp = forecastDay.day.mintemp_c;
+        const condition = forecastDay.day.condition.text;
+        const iconUrl = forecastDay.day.condition.icon;
+
+        forecastData.push({
+          date: date,
+          maxTemp: maxTemp,
+          minTemp: minTemp,
+          condition: condition,
+          iconUrl: iconUrl,
+        });
+      }
+
+      return forecastData;
+    })
+    .catch(function (error) {
+      console.error(`Error: ${error}`);
+    });
+};
+
+// TODO Function ...
+const getHourlyForecastData = (locationQuery) => {
+  /**
+   * Documentation
+   * 
+   * 
+   */
+
+  // URL for accessing the API with hourly forecast
+  const endpoint = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationQuery}&days=1&hourly=24`;
+
+  // Make API call that returns a promise created by fetch
+  return fetch(endpoint, { mode: 'cors' })
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+    const hourlyForecastData = [];
+
+    // Loop through the hourly forecast data and extract the relevant information
+    for (let i = 0; i < data.forecast.forecastday[0].hour.length; i++) {
+      const hourlyData = data.forecast.forecastday[0].hour[i];
+      const hour = hourlyData.time; // You can also use time_epoch for Unix timestamp
+      const temperature = hourlyData.temp_c; // Corrected property name
+      const condition = hourlyData.condition.text;
+      const iconUrl = hourlyData.condition.icon;
+
+      hourlyForecastData.push({
+        hour: hour,
+        temperature: temperature, // Corrected property name
+        condition: condition,
+        iconUrl: iconUrl,
+      });
+    }
+
+    return hourlyForecastData;
+  })
+  .catch(function (error) {
+    console.error(`Error: ${error}`);
+  });
+};
 
 
-getCurrentWeatherData('Stockholm')
+
+// ---------- Execution ----------
+
+// TODO Calling...
+getCurrentWeatherData(locationQuery)
   .then(function(data) {
     const condition = data.condition;
     const iconUrl = data.iconUrl;
@@ -84,3 +169,38 @@ getCurrentWeatherData('Stockholm')
   .catch(function(error) {
     console.error(`Error: ${error}`);
   });
+
+
+// TODO Calling...
+getDailyForecastData(locationQuery)
+.then(function(data) {
+  data.forEach(forecast => {
+    const date = forecast.date;
+    const condition = forecast.condition;
+    const maxTemp = forecast.maxTemp;
+    const minTemp = forecast.minTemp;
+
+    // Do something with the extracted data here...
+    console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
+  });
+})
+.catch(function(error) {
+  console.error(`Error: ${error}`);
+});
+
+// TODO Calling...
+getHourlyForecastData(locationQuery)
+  .then(function(data) {
+    data.forEach(hourly => {
+      const hour = hourly.hour; // Use 'hour' instead of 'time'
+      const condition = hourly.condition;
+      const temperature = hourly.temperature;
+
+      // Do something with the extracted data here...
+      console.log(`Time: ${hour}, Condition: ${condition}, Temperature: ${temperature}`);
+    });
+  })
+  .catch(function(error) {
+    console.error(`Error: ${error}`);
+  });
+
