@@ -22,6 +22,10 @@ function getCurrentWeatherData(locationQuery) {
   // Make API call that returns a promise created by fetch
   return fetch(endpoint, {mode: 'cors'})
     .then(response => {
+      // Check if the fetch request was successful
+      if (!response.ok) {
+        throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
+      }
       return response.json();
     })
     // Assigning parsed data points of interest to variables
@@ -59,7 +63,7 @@ function getDailyForecastData(locationQuery) {
   /**
    * Documentation
    * 
-   * 
+   *  
    */
 
   // URL for accessing the API
@@ -68,6 +72,10 @@ function getDailyForecastData(locationQuery) {
   // Make API call that returns a promise created by fetch
   return fetch(endpoint, { mode: 'cors' })
     .then(response => {
+      // Check if the fetch request was successful
+      if (!response.ok) {
+        throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
+      }
       return response.json();
     })
     .then(data => {
@@ -115,6 +123,10 @@ function getHourlyForecastData(locationQuery) {
   // Make API call that returns a promise created by fetch
   return fetch(endpoint, { mode: 'cors' })
   .then(response => {
+    // Check if the fetch request was successful
+    if (!response.ok) {
+      throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
+    }
     return response.json();
   })
   .then(data => {
@@ -148,19 +160,19 @@ function getHourlyForecastData(locationQuery) {
 
 
 // Call the data-collection functions for a query
-const getAllData = (locationQuery) => {
+async function getAllData (locationQuery) {
   // TODO Calling...
-  getCurrentWeatherData(locationQuery)
-  .then(function(data) {
+  try {
+    // Get current weather data
+    const currentWeatherData = await getCurrentWeatherData(locationQuery);
     const condition = data.condition;
     const iconUrl = data.iconUrl;
     const currentTemp = data.currentTemp;
     const feelsLike = data.feelsLike;
     const humidity = data.humidity;
-    const chanceOfRain = data.chanceOfRain;
     const wind = data.wind;
-    
-    // Do something with the extracted data here...
+      
+    // TODO Do something with the extracted data here...
     console.log(`
       Condition: ${condition}, 
       IconUrl: ${iconUrl}, 
@@ -168,45 +180,37 @@ const getAllData = (locationQuery) => {
       Feels like: ${feelsLike}, 
       Humidity: ${humidity}, 
       Wind: ${wind}
-      `);
-    })
-    .catch(function (error) {
-      console.error(`Error: ${error}`);
-  });
+    `);
+    
 
 
-  // TODO Calling...
-  getDailyForecastData(locationQuery)
-  .then(function(data) {
-  data.forEach(forecast => {
-    const date = forecast.date;
-    const condition = forecast.condition;
-    const maxTemp = forecast.maxTemp;
-    const minTemp = forecast.minTemp;
+    // Get daily forecast data
+    const dailyForecastData = await getDailyForecastData(locationQuery);
+    dailyForecastData.forEach(forecast => {
+      const date = forecast.date;
+      const condition = forecast.condition;
+      const maxTemp = forecast.maxTemp;
+      const minTemp = forecast.minTemp;
+      
+      // Do something with the extracted data here...
+      console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
+      });
 
-    // Do something with the extracted data here...
-    console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
-    });
-  })
-  .catch(function (error) {
-    console.error(`Error: ${error}`);
-  });
-
-  // TODO Calling...
-  getHourlyForecastData(locationQuery)
-  .then(function(data) {
-    data.forEach(hourly => {
+    // Get hourly forecast data
+    const hourlyForecastData = await getHourlyForecastData(locationQuery)
+    hourlyForecastData.forEach(hourly => {
       const hour = hourly.hour; // Use 'hour' instead of 'time'
       const condition = hourly.condition;
       const temperature = hourly.temperature;
 
       // Do something with the extracted data here...
       console.log(`Time: ${hour}, Condition: ${condition}, Temperature: ${temperature}`);
-    });
-  })
-  .catch(function (error) {
+      });
+  }
+  catch (error) {
     console.error(`Error: ${error}`);
-  });
+    
+  }
 };
 
 
