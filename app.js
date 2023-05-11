@@ -1,5 +1,17 @@
 // Ossian Hempel
 
+// Declaring element variables
+locationDiv = document.querySelector('.location');
+conditionDiv = document.querySelector('.condition');
+weatherIconImg = document.querySelector('.weatherIcon');
+temperatureDiv = document.querySelector('.temperature');
+feelsLikeDiv = document.querySelector('.feels-like');
+humidityDiv = document.querySelector('.humidity');
+windDiv = document.querySelector('.wind');
+
+
+
+
 // API Key generated from Weather API: https://www.weatherapi.com/
 const apiKey = 'c9743f30e57d4c16b27210100230105';
 
@@ -159,31 +171,26 @@ function getHourlyForecastData(locationQuery) {
 };
 
 
-// Call the data-collection functions for a query
+// Call all data-collection functions for a query
 async function getAllData (locationQuery) {
-  // TODO Calling...
   try {
     // Get current weather data
     const currentWeatherData = await getCurrentWeatherData(locationQuery);
-    const condition = data.condition;
-    const iconUrl = data.iconUrl;
-    const currentTemp = data.currentTemp;
-    const feelsLike = data.feelsLike;
-    const humidity = data.humidity;
-    const wind = data.wind;
-      
-    // TODO Do something with the extracted data here...
-    console.log(`
-      Condition: ${condition}, 
-      IconUrl: ${iconUrl}, 
-      Current temperature: ${currentTemp};
-      Feels like: ${feelsLike}, 
-      Humidity: ${humidity}, 
-      Wind: ${wind}
-    `);
+    const condition = currentWeatherData.condition;
+    const currentTemp = currentWeatherData.currentTemp;
+    const feelsLike = currentWeatherData.feelsLike;
+    const humidity = currentWeatherData.humidity;
+    const wind = currentWeatherData.wind;
     
+    // Display current weather data in the DOM
+    locationDiv.textContent = locationQuery;
+    conditionDiv.textContent = `Condition: ${condition}`;
+    temperatureDiv.textContent = `Current temperature: ${currentTemp}`;
+    feelsLikeDiv.textContent = `Feels like: ${feelsLike}`;
+    humidityDiv.textContent = `Humidity: ${humidity}`;
+    windDiv.textContent = `Wind: ${wind}`;
 
-
+    
     // Get daily forecast data
     const dailyForecastData = await getDailyForecastData(locationQuery);
     dailyForecastData.forEach(forecast => {
@@ -194,6 +201,8 @@ async function getAllData (locationQuery) {
       
       // Do something with the extracted data here...
       console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
+      
+
       });
 
     // Get hourly forecast data
@@ -224,8 +233,10 @@ const searchWeather = (event) => {
   const locationQuery = locationInput.value;
 
   // Call the getAllData function with the locationQuery
-  console.log(locationQuery);
+  // console.log(locationQuery);
   getAllData(locationQuery);
+
+
 };
 
 

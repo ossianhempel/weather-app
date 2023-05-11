@@ -11,15 +11,42 @@
 </head>
 <body>
 
-  <h1>TEST!</h1>
+  <div id="wrapper">
 
-  <!-- Form for the search query -->
-  <h2>Location:</h2>
-  <form id="weather-form" action="/submit" method="POST">
-    <label for="location">Location: </label>
-    <input type="text" id="location" name="location" required>
-    <input type="submit" value="Submit">
-  </form>
+    <div id="search-container">
+      
+      <!-- Form for the search query -->
+      <h2>Location:</h2>
+      <form id="weather-form" action="/submit" method="POST">
+        <label for="location">Location: </label>
+        <input type="text" id="location" name="location" required>
+        <input type="submit" value="Submit">
+
+      </form>
+    </div>
+
+    <div id="current-weather-container">
+      <div>
+        <h2 class="location">Location</h2>
+        <div class="condition">Condition</div>
+      </div>
+      <div class="kkk">
+        <div class="temperature">Temperature</div>
+        <div class="kll">
+          <div class="feels-like">Feels like</div>
+          <div class="humidity">Humidity</div>
+          <div class="wind">Wind</div>
+        </div>
+      </div>  
+    </div>
+
+    <div id="forecasted-weather-container">
+      kjlkjökj
+    </div>
+
+  </div>
+
+
 
   <script src="app.js"></script>
 </body>

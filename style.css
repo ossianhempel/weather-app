@@ -1,5 +1,41 @@
 /* Ossian Hempel */
 
-h1 {
-  color: red;
+
+
+body, html {
+  margin: 0;
+  height: 100%;
+  /* font-family: 'Lato', sans-serif; */
+}
+
+/* Grid wrapper för hela sidan */
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100vh;
+}
+
+#search-container {
+  border: 1px solid black;
+  /* margin: auto; */
+}
+
+#current-weather-container {
+  display: flex;
+  border: 1px solid black;
+  margin: auto;
+}
+
+.location {
+  
+}
+
+#forecasted-weather-container {
+  display: flex;
+  border: 1px solid black;
+  margin: auto;
+  
 }
