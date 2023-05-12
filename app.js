@@ -1,26 +1,28 @@
 // Ossian Hempel
 
 // Declaring element variables
-locationDiv = document.querySelector('.location');
-conditionDiv = document.querySelector('.condition');
-weatherIconImg = document.querySelector('.weatherIcon');
-temperatureDiv = document.querySelector('.temperature');
-feelsLikeDiv = document.querySelector('.feels-like');
-humidityDiv = document.querySelector('.humidity');
-windDiv = document.querySelector('.wind');
+const locationDiv = document.querySelector('.location');
+const conditionDiv = document.querySelector('.condition');
+const weatherIconImg = document.querySelector('.weatherIcon');
+const temperatureDiv = document.querySelector('.temperature');
+const feelsLikeDiv = document.querySelector('.feels-like');
+const humidityDiv = document.querySelector('.humidity');
+const windDiv = document.querySelector('.wind');
+const forecastContainer = document.querySelector(".forecast-container");
 
-
+let allData = {};
 
 
 // API Key generated from Weather API: https://www.weatherapi.com/
 const apiKey = 'c9743f30e57d4c16b27210100230105';
 
 
-// ---------- Declaring functions ----------
-
 // TODO Reference The Odin Project
-// TODO Function for..
-function getCurrentWeatherData(locationQuery) {
+
+
+
+// Get current weather data
+function getCurrentWeatherData(locationQuery='Stockholm') {
   /**
    * Documentation
    * 
@@ -69,7 +71,7 @@ function getCurrentWeatherData(locationQuery) {
 }
 
 
-// TODO Function ...
+// Get daily forecasted data
 function getDailyForecastData(locationQuery) {
 
   /**
@@ -121,7 +123,7 @@ function getDailyForecastData(locationQuery) {
     })
 };
 
-// TODO Function ...
+// Get hourly forecasted data
 function getHourlyForecastData(locationQuery) {
   /**
    * Documentation
@@ -172,7 +174,7 @@ function getHourlyForecastData(locationQuery) {
 
 
 // Call all data-collection functions for a query
-async function getAllData (locationQuery) {
+async function getAllData (locationQuery="Stockholm") {
   try {
     // Get current weather data
     const currentWeatherData = await getCurrentWeatherData(locationQuery);
@@ -200,10 +202,8 @@ async function getAllData (locationQuery) {
       const minTemp = forecast.minTemp;
       
       // Do something with the extracted data here...
-      console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
-      
-
-      });
+      //console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
+    });
 
     // Get hourly forecast data
     const hourlyForecastData = await getHourlyForecastData(locationQuery)
@@ -215,12 +215,68 @@ async function getAllData (locationQuery) {
       // Do something with the extracted data here...
       console.log(`Time: ${hour}, Condition: ${condition}, Temperature: ${temperature}`);
       });
+
+  // Return the fetched data
+  return {
+    currentWeatherData: currentWeatherData,
+    dailyForecastData: dailyForecastData,
+    hourlyForecastData: hourlyForecastData,
+  };
   }
   catch (error) {
     console.error(`Error: ${error}`);
-    
   }
 };
+
+// Function that takes a list of forecasted data and creates a new div displaying it's attributes
+function createForecastElement(forecast, isHourly) {
+  // Create a new div element
+  let newDiv = document.createElement("div");
+  newDiv.classList.add('forecast-element');
+
+  // Add content to the div
+  if (isHourly) {
+    newDiv.textContent = `
+      Time: ${forecast.hour}, 
+      Condition: ${forecast.condition}, 
+      Temperature: ${forecast.temperature}
+      `;
+  } else {
+    newDiv.textContent = `
+      Date: ${forecast.date}, 
+      Condition: ${forecast.condition}, 
+      Max temperature: ${forecast.maxTemp}, 
+      Min temperature: ${forecast.minTemp}
+      `;
+  }
+
+  // Return the new div element
+  return newDiv;
+}
+
+// Function that takes a list of forecasted data and creates a new div for each item in the list
+function displayForecast(forecastData, isHourly) {
+  // Clear the forecast container
+  forecastContainer.innerHTML = '';
+
+  // If the forecast is hourly, only take the next 8 hours from the current hour
+  if (isHourly) {
+    // Get the forecast from the current hour to 7 hours ahead
+    forecastData1 = forecastData.slice(6, 16);
+    forecastData2 = forecastData.slice(16, 24);
+      // Add a new div for each forecast
+    forecastData1.forEach(forecast => {
+      forecastContainer.appendChild(createForecastElement(forecast, isHourly));
+    });
+  } else {
+      // Add a new div for each forecast
+    forecastData.forEach(forecast => {
+      forecastContainer.appendChild(createForecastElement(forecast, isHourly));
+    });
+  };
+  
+}
+
 
 
 // Function for performing the search
@@ -233,21 +289,47 @@ const searchWeather = (event) => {
   const locationQuery = locationInput.value;
 
   // Call the getAllData function with the locationQuery
-  // console.log(locationQuery);
-  getAllData(locationQuery);
-
-
+  // When calling getAllData, store the returned data in the allData variable
+  getAllData(locationQuery)
+    .then(data => {
+      allData = data;
+      // Display the daily forecast immediately after the data has been fetched
+      displayForecast(allData.dailyForecastData, false);
+    })
+    .catch(error => {
+      console.error(`Failed to fetch weather data: ${error}`);
+      // potentially display an error message in the UI here
+    });
 };
 
 
 
-
-
-// ---------- Execution ----------
+// ------------------- Execution -------------------
 
 
 // Add an event listener for the form submit event
 const form = document.querySelector('#weather-form');
 form.addEventListener('submit', searchWeather);
 
-// getAllData('Stockholm')
+
+// Event listener for the daily forecast button
+document.querySelector("#daily-btn").addEventListener("click", () => {
+  displayForecast(allData.dailyForecastData, false);
+});
+
+// Event listener for the hourly forecast button
+document.querySelector("#hourly-btn").addEventListener("click", () => {
+  displayForecast(allData.hourlyForecastData, true);
+});
+
+// Default data on page load
+getAllData()
+    .then(data => {
+      allData = data;
+      // Display the daily forecast immediately after the data has been fetched
+      displayForecast(allData.dailyForecastData, false);
+    })
+    .catch(error => {
+      console.error(`Failed to fetch weather data: ${error}`);
+      // potentially display an error message in the UI here
+    });

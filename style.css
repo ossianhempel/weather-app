@@ -34,8 +34,21 @@ body, html {
 }
 
 #forecasted-weather-container {
-  display: flex;
+  /* display: flex; */
   border: 1px solid black;
   margin: auto;
   
+}
+
+.daily-hourly-btn-container {
+  display: flex;
+}
+
+.forecast-container {
+  display: flex;
+
+}
+
+.forecast-element {
+  border: 1px solid black;
 }
