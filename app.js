@@ -9,7 +9,17 @@ const feelsLikeDiv = document.querySelector('.feels-like');
 const humidityDiv = document.querySelector('.humidity');
 const windDiv = document.querySelector('.wind');
 const forecastContainer = document.querySelector(".forecast-container");
+const forecastBtnContainer = document.querySelector('.daily-hourly-btn-container');
+const forecastHeader = document.querySelector('#forecasted-weather-header');
 
+// Create button to toggle between hourly forecast data
+const toggleHourlyForecastBtn = document.createElement('button');
+toggleHourlyForecastBtn.classList.add('toggle-hourly-forecast-btn');
+
+// Declare a variable to keep track of which hourly forecasted data set is currently displayed
+let isDisplayingFirstDataSet = true;  
+
+// ???
 let allData = {};
 
 
@@ -55,7 +65,6 @@ function getCurrentWeatherData(locationQuery='Stockholm') {
       const currentTemp = data.current.temp_c;
       const feelsLikeC = data.current.feelslike_c;
       const humidity = data.current.humidity;
-      // const chanceOfRain = data.current.chance_of_rain; Only exists for forecast
       const windKph = data.current.wind_kph;
 
       // Return an object containing the extracted data
@@ -201,8 +210,6 @@ async function getAllData (locationQuery="Stockholm") {
       const maxTemp = forecast.maxTemp;
       const minTemp = forecast.minTemp;
       
-      // Do something with the extracted data here...
-      //console.log(`Date: ${date}, Condition: ${condition}, Max temperature: ${maxTemp}, Min temperature: ${minTemp}`);
     });
 
     // Get hourly forecast data
@@ -211,21 +218,18 @@ async function getAllData (locationQuery="Stockholm") {
       const hour = hourly.hour; // Use 'hour' instead of 'time'
       const condition = hourly.condition;
       const temperature = hourly.temperature;
-
-      // Do something with the extracted data here...
-      console.log(`Time: ${hour}, Condition: ${condition}, Temperature: ${temperature}`);
       });
 
-  // Return the fetched data
-  return {
-    currentWeatherData: currentWeatherData,
-    dailyForecastData: dailyForecastData,
-    hourlyForecastData: hourlyForecastData,
-  };
-  }
-  catch (error) {
-    console.error(`Error: ${error}`);
-  }
+    // Return the fetched data
+    return {
+      currentWeatherData: currentWeatherData,
+      dailyForecastData: dailyForecastData,
+      hourlyForecastData: hourlyForecastData,
+    };
+    }
+    catch (error) {
+      console.error(`Error: ${error}`);
+    }
 };
 
 // Function that takes a list of forecasted data and creates a new div displaying it's attributes
@@ -256,26 +260,55 @@ function createForecastElement(forecast, isHourly) {
 
 // Function that takes a list of forecasted data and creates a new div for each item in the list
 function displayForecast(forecastData, isHourly) {
+
   // Clear the forecast container
   forecastContainer.innerHTML = '';
 
-  // If the forecast is hourly, only take the next 8 hours from the current hour
+  // If the forecast is hourly, display hourly forecast
   if (isHourly) {
     // Get the forecast from the current hour to 7 hours ahead
-    forecastData1 = forecastData.slice(6, 16);
-    forecastData2 = forecastData.slice(16, 24);
-      // Add a new div for each forecast
-    forecastData1.forEach(forecast => {
+    let forecastData1 = forecastData.slice(6, 16);
+    let forecastData2 = forecastData.slice(16, 24);
+
+    // Change the forecasted data's header
+    forecastHeader.textContent = "Hourly forecast";
+
+    // Append the button to toggle between hourly forecast data
+    if(!forecastBtnContainer.contains(toggleHourlyForecastBtn)) {
+      forecastBtnContainer.appendChild(toggleHourlyForecastBtn);
+    }
+
+    // Add a new div for each forecast
+    let dataToDisplay = isDisplayingFirstDataSet ? forecastData1 : forecastData2;
+    dataToDisplay.forEach(forecast => {
       forecastContainer.appendChild(createForecastElement(forecast, isHourly));
     });
+
+    // Set up the click event handler for the button
+    toggleHourlyForecastBtn.onclick = function() {
+      // Swap the value of isDisplayingFirstDataSet
+      isDisplayingFirstDataSet = !isDisplayingFirstDataSet;
+      
+      // Call displayForecast again to update the display
+      displayForecast(forecastData, isHourly);
+    }
   } else {
-      // Add a new div for each forecast
+
+    // Change the forecasted data's header
+    forecastHeader.textContent = "Daily forecast";
+
+    // Add a new div for each forecast
     forecastData.forEach(forecast => {
       forecastContainer.appendChild(createForecastElement(forecast, isHourly));
     });
-  };
-  
+
+    // Remove the button for toggling between hourly forecast data
+    if(forecastBtnContainer.contains(toggleHourlyForecastBtn)) {
+      forecastBtnContainer.removeChild(toggleHourlyForecastBtn);
+    }
+  }
 }
+
 
 
 
