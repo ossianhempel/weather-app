@@ -1,6 +1,8 @@
 /* Ossian Hempel */
 
-
+/* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */ 
+/* CSS Reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; } /* HTML5 display-role reset for older browsers */ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; } body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } table { border-collapse: collapse; border-spacing: 0; }
 
 body, html {
   margin: 0;
@@ -8,7 +10,7 @@ body, html {
   /* font-family: 'Lato', sans-serif; */
 }
 
-/* Grid wrapper för hela sidan */
+/* Wrapper for the content */
 #wrapper {
   display: flex;
   flex-direction: column;
@@ -25,13 +27,45 @@ body, html {
 
 #current-weather-container {
   display: flex;
+  flex-direction: column;
+  gap: 15px;
   border: 1px solid black;
   margin: auto;
 }
 
-.location {
-  
+.condition {
+  font-size: 30px;
 }
+
+.current-weather-container-lower {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+
+.location {
+  font-size: 60px;
+  font-weight: bold;
+  margin: auto;
+}
+
+.current-weather-container-lower-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  border-left: 1px solid black;
+  margin: auto;
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.temperature {
+  font-size: 100px;
+  font-weight: bolder;
+}
+
+
 
 #forecasted-weather-container {
   /* display: flex; */

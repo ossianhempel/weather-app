@@ -18,24 +18,24 @@
       <!-- Form for the search query -->
       <h2>Location:</h2>
       <form id="weather-form" action="/submit" method="POST">
-        <label for="location">Location: </label>
-        <input type="text" id="location" name="location" required>
-        <input type="submit" value="Submit">
+        <label for="location"></label>
+        <input type="text" id="location" name="location" required placeholder="Enter a location...">
+        <input type="submit" value="Search">
 
       </form>
     </div>
 
     <div id="current-weather-container">
-      <div>
-        <h2 class="location">Location</h2>
+      <div class="current-weather-container-upper">
         <div class="condition">Condition</div>
+        <h2 class="location">Location</h2>
       </div>
-      <div class="kkk">
+      <div class="current-weather-container-lower">
         <div class="temperature">Temperature</div>
-        <div class="kll">
+        <div class="current-weather-container-lower-right">
           <div class="feels-like">Feels like</div>
-          <div class="humidity">Humidity</div>
           <div class="wind">Wind</div>
+          <div class="humidity">Humidity</div>
         </div>
       </div>  
     </div>

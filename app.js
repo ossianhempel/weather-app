@@ -32,7 +32,7 @@ const apiKey = 'c9743f30e57d4c16b27210100230105';
 
 
 // Get current weather data
-function getCurrentWeatherData(locationQuery='Stockholm') {
+function getCurrentWeatherData(locationQuery) {
   /**
    * Documentation
    * 
@@ -183,7 +183,8 @@ function getHourlyForecastData(locationQuery) {
 
 
 // Call all data-collection functions for a query
-async function getAllData (locationQuery="Stockholm") {
+async function getAllData (locationQuery="London") {
+  // Error handling within the function
   try {
     // Get current weather data
     const currentWeatherData = await getCurrentWeatherData(locationQuery);
@@ -195,11 +196,11 @@ async function getAllData (locationQuery="Stockholm") {
     
     // Display current weather data in the DOM
     locationDiv.textContent = locationQuery;
-    conditionDiv.textContent = `Condition: ${condition}`;
-    temperatureDiv.textContent = `Current temperature: ${currentTemp}`;
-    feelsLikeDiv.textContent = `Feels like: ${feelsLike}`;
-    humidityDiv.textContent = `Humidity: ${humidity}`;
-    windDiv.textContent = `Wind: ${wind}`;
+    conditionDiv.textContent = `${condition}`;
+    temperatureDiv.textContent = `${currentTemp}°C`;
+    feelsLikeDiv.textContent = `Feels like: ${feelsLike}°C`;
+    humidityDiv.textContent = `Humidity: ${humidity}%`;
+    windDiv.textContent = `Wind: ${wind} km/h`;
 
     
     // Get daily forecast data
@@ -308,9 +309,6 @@ function displayForecast(forecastData, isHourly) {
     }
   }
 }
-
-
-
 
 // Function for performing the search
 const searchWeather = (event) => {
