@@ -11,6 +11,7 @@ const windDiv = document.querySelector('.wind');
 const forecastContainer = document.querySelector(".forecast-container");
 const forecastBtnContainer = document.querySelector('.daily-hourly-btn-container');
 const forecastHeader = document.querySelector('#forecasted-weather-header');
+const searchErrorMessage = document.querySelector('.search-error-message');
 
 // Create button to toggle between hourly forecast data
 const toggleHourlyForecastBtn = document.createElement('button');
@@ -320,7 +321,7 @@ const searchWeather = (event) => {
   event.preventDefault();
 
   // Get the form element and the location input value
-  const locationInput = form.querySelector('#location');
+  const locationInput = form.querySelector('#search-location');
   const locationQuery = locationInput.value;
 
   // Call the getAllData function with the locationQuery
@@ -333,7 +334,7 @@ const searchWeather = (event) => {
     })
     .catch(error => {
       console.error(`Failed to fetch weather data: ${error}`);
-      // potentially display an error message in the UI here
+      searchErrorMessage.style.display = 'block';
     });
 };
 

@@ -14,15 +14,14 @@
   <div id="wrapper">
 
     <div id="search-container">
-      
       <!-- Form for the search query -->
-      <h2>Location:</h2>
       <form id="weather-form" action="/submit" method="POST">
         <label for="location"></label>
-        <input type="text" id="location" name="location" required placeholder="Enter a location...">
-        <input type="submit" value="Search">
-
+        <input type="text" id="search-location" name="location" required placeholder="Search a location...">
+        <!-- Icon from https://icons8.com/icon/132/search -->
+        <input type="image" src="images/icons8-search.svg" alt="search icon" id="search-button">
       </form>
+      <div class="search-error-message">No matching location found</div>
     </div>
 
     <div id="current-weather-container">
