@@ -42,7 +42,6 @@ function getCurrentWeatherData(locationQuery) {
   // URL for accessing the API
   const endpoint = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${locationQuery}`;
   
-  
   // Make API call that returns a promise created by fetch
   return fetch(endpoint, {mode: 'cors'})
     .then(response => {
@@ -54,13 +53,14 @@ function getCurrentWeatherData(locationQuery) {
     })
     // Assigning parsed data points of interest to variables
     .then(data => {
-      
       // Check if the response contains an error message
       if (data.error) {
         throw new Error(data.error.message);
       }
-
+      // console.log(data)
       const condition = data.current.condition.text;
+      const country = data.location.country;
+      const city = data.location.name;
       const iconUrl = data.current.condition.icon;
       const currentTemp = data.current.temp_c;
       const feelsLikeC = data.current.feelslike_c;
@@ -70,6 +70,8 @@ function getCurrentWeatherData(locationQuery) {
       // Return an object containing the extracted data
       return {
         condition: condition,
+        country: country,
+        city: city,
         iconUrl: iconUrl,
         currentTemp: currentTemp,
         feelsLike: feelsLikeC,
@@ -189,13 +191,15 @@ async function getAllData (locationQuery="London") {
     // Get current weather data
     const currentWeatherData = await getCurrentWeatherData(locationQuery);
     const condition = currentWeatherData.condition;
+    const country = currentWeatherData.country;
+    const city = currentWeatherData.city;
     const currentTemp = currentWeatherData.currentTemp;
     const feelsLike = currentWeatherData.feelsLike;
     const humidity = currentWeatherData.humidity;
     const wind = currentWeatherData.wind;
     
     // Display current weather data in the DOM
-    locationDiv.textContent = locationQuery;
+    locationDiv.textContent = `${city}, ${country}`;
     conditionDiv.textContent = `${condition}`;
     temperatureDiv.textContent = `${currentTemp}°C`;
     feelsLikeDiv.textContent = `Feels like: ${feelsLike}°C`;
