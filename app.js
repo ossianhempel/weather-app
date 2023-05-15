@@ -2,12 +2,12 @@
 
 // Declaring element variables
 const locationDiv = document.querySelector('.location');
-const conditionDiv = document.querySelector('.condition');
+const conditionDiv = document.querySelector('.current-condition');
 const weatherIconImg = document.querySelector('.weatherIcon');
-const temperatureDiv = document.querySelector('.temperature');
-const feelsLikeDiv = document.querySelector('.feels-like');
-const humidityDiv = document.querySelector('.humidity');
-const windDiv = document.querySelector('.wind');
+const temperatureDiv = document.querySelector('.current-temperature');
+const feelsLikeDiv = document.querySelector('.current-feels-like');
+const humidityDiv = document.querySelector('.current-humidity');
+const windDiv = document.querySelector('.current-wind');
 const forecastContainer = document.querySelector(".forecast-container");
 const forecastBtnContainer = document.querySelector('.daily-hourly-btn-container');
 const forecastHeader = document.querySelector('#forecasted-weather-header');
@@ -328,11 +328,14 @@ const searchWeather = (event) => {
   // When calling getAllData, store the returned data in the allData variable
   getAllData(locationQuery)
     .then(data => {
+      // Hide error message on successful query
+      searchErrorMessage.style.display = 'none';
       allData = data;
       // Display the daily forecast immediately after the data has been fetched
       displayForecast(allData.dailyForecastData, false);
     })
     .catch(error => {
+      // Display error message on unsuccessful query
       console.error(`Failed to fetch weather data: ${error}`);
       searchErrorMessage.style.display = 'block';
     });
