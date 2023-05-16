@@ -123,6 +123,7 @@ body, html {
   display: flex;
   height: 33vh;
   border: 1px solid black;
+  justify-content: center;
 
 
 
@@ -131,7 +132,7 @@ body, html {
 #forecasted-weather-container {
   /* display: flex; */
   border: 1px solid black;
-  margin: auto;
+  /* margin: auto; */
   
 }
 
@@ -145,5 +146,8 @@ body, html {
 }
 
 .forecast-element {
+  display: flex;
+  flex-direction: column;
   border: 1px solid black;
+
 }

@@ -93,6 +93,7 @@ function getDailyForecastData(locationQuery) {
    */
 
   // URL for accessing the API
+  // (Can only get 3 days worth of forecasting on the free API tier)
   const endpoint = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationQuery}&days=7`;
 
   // Make API call that returns a promise created by fetch
@@ -105,7 +106,6 @@ function getDailyForecastData(locationQuery) {
       return response.json();
     })
     .then(data => {
-      
       // Check if the response contains an error message
       if (data.error) {
         throw new Error(data.error.message);
@@ -241,27 +241,44 @@ async function getAllData (locationQuery="London") {
 // Function that takes a list of forecasted data and creates a new div displaying it's attributes
 function createForecastElement(forecast, isHourly) {
   // Create a new div element
-  let newDiv = document.createElement("div");
-  newDiv.classList.add('forecast-element');
+  let forecastDiv = document.createElement("div");
+  forecastDiv.classList.add('forecast-element');
+
+  // Create sub-divs for the different weather attributes
+  // Hourly forecast
+  let hourlyForecastTimeDiv = document.createElement('div');
+  let hourlyForecastConditionDiv = document.createElement('div');
+  let hourlyForecastTemperatureDiv = document.createElement('div');
+
+  
+  // Daily forecast
+  let dailyForecastDateDiv = document.createElement('div');
+  let dailyForecastConditionDiv = document.createElement('div');
+  let dailyForecastMaxTemperatureDiv = document.createElement('div');
+  let dailyForecastMinTemperatureDiv = document.createElement('div');
+
 
   // Add content to the div
   if (isHourly) {
-    newDiv.textContent = `
-      Time: ${forecast.hour}, 
-      Condition: ${forecast.condition}, 
-      Temperature: ${forecast.temperature}
-      `;
+    forecastDiv.appendChild(hourlyForecastTimeDiv);
+    forecastDiv.appendChild(hourlyForecastConditionDiv);
+    forecastDiv.appendChild(hourlyForecastTemperatureDiv);
+    hourlyForecastTimeDiv.textContent = `${forecast.hour}`;
+    hourlyForecastConditionDiv.textContent = `${forecast.condition}`;
+    hourlyForecastTemperatureDiv.textContent = `${forecast.temperature}`;
   } else {
-    newDiv.textContent = `
-      Date: ${forecast.date}, 
-      Condition: ${forecast.condition}, 
-      Max temperature: ${forecast.maxTemp}, 
-      Min temperature: ${forecast.minTemp}
-      `;
+    forecastDiv.appendChild(dailyForecastDateDiv);
+    forecastDiv.appendChild(dailyForecastConditionDiv);
+    forecastDiv.appendChild(dailyForecastMaxTemperatureDiv);
+    forecastDiv.appendChild(dailyForecastMinTemperatureDiv);
+    dailyForecastDateDiv.textContent = `${forecast.date}`;
+    dailyForecastConditionDiv.textContent = `${forecast.condition}`;
+    dailyForecastMaxTemperatureDiv.textContent = `${forecast.maxTemp}`;
+    dailyForecastMinTemperatureDiv.textContent = `${forecast.minTemp}`;
   }
 
   // Return the new div element
-  return newDiv;
+  return forecastDiv;
 }
 
 // Function that takes a list of forecasted data and creates a new div for each item in the list
