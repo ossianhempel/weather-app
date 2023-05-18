@@ -157,8 +157,13 @@ body, html {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
-  height: 10vw;
-  width: 10vw;
+  height: 15vw;
+  width: 15vw;
+  max-width: 200px;
+  max-height: 200px;
+  justify-content: space-evenly;
+  align-items: center;
+
 }
 
 

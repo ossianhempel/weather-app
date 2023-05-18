@@ -252,13 +252,21 @@ function createForecastElement(forecast, isHourly) {
   let hourlyForecastTimeDiv = document.createElement('div');
   let hourlyForecastConditionDiv = document.createElement('div');
   let hourlyForecastTemperatureDiv = document.createElement('div');
+  hourlyForecastTimeDiv.classList.add('hourly-forecast-time');
+  hourlyForecastConditionDiv.classList.add('hourly-forecast-condition');
+  hourlyForecastTemperatureDiv.classList.add('hourly-forecast-temperature');
 
-  
   // Daily forecast
   let dailyForecastDateDiv = document.createElement('div');
   let dailyForecastConditionDiv = document.createElement('div');
   let dailyForecastMaxTemperatureDiv = document.createElement('div');
   let dailyForecastMinTemperatureDiv = document.createElement('div');
+  dailyForecastDateDiv.classList.add('daily-forecast-date');
+  dailyForecastConditionDiv.classList.add('daily-forecast-condition');
+  dailyForecastMaxTemperatureDiv.classList.add('daily-forecast-max-temperature');
+  dailyForecastMinTemperatureDiv.classList.add('daily-forecast-min-temperature');
+
+
 
 
   // Add content to the div
@@ -267,17 +275,18 @@ function createForecastElement(forecast, isHourly) {
     forecastDiv.appendChild(hourlyForecastConditionDiv);
     forecastDiv.appendChild(hourlyForecastTemperatureDiv);
     hourlyForecastTimeDiv.textContent = `${forecast.hour}`;
+    hourlyForecastTemperatureDiv.textContent = `${forecast.temperature}°C`;
     hourlyForecastConditionDiv.textContent = `${forecast.condition}`;
-    hourlyForecastTemperatureDiv.textContent = `${forecast.temperature}`;
+
   } else {
     forecastDiv.appendChild(dailyForecastDateDiv);
     forecastDiv.appendChild(dailyForecastConditionDiv);
     forecastDiv.appendChild(dailyForecastMaxTemperatureDiv);
     forecastDiv.appendChild(dailyForecastMinTemperatureDiv);
     dailyForecastDateDiv.textContent = `${forecast.date}`;
+    dailyForecastMaxTemperatureDiv.textContent = `${forecast.maxTemp}°C`;
+    dailyForecastMinTemperatureDiv.textContent = `${forecast.minTemp}°C`;
     dailyForecastConditionDiv.textContent = `${forecast.condition}`;
-    dailyForecastMaxTemperatureDiv.textContent = `${forecast.maxTemp}`;
-    dailyForecastMinTemperatureDiv.textContent = `${forecast.minTemp}`;
   }
 
   // Return the new div element
@@ -286,13 +295,10 @@ function createForecastElement(forecast, isHourly) {
 
 // Create two buttons for toggling the data
 const toggleNextBtn = document.createElement('button');
-const togglePrevBtn = document.createElement('button');
 toggleNextBtn.textContent = 'Next';
-togglePrevBtn.textContent = 'Previous';
 
 // Add class to buttons for styling
 toggleNextBtn.classList.add('toggle-button');
-togglePrevBtn.classList.add('toggle-button');
 
 // Function that takes a list of forecasted data and creates a new div for each item in the list
 function displayForecast(forecastData, isHourly) {
@@ -310,12 +316,9 @@ function displayForecast(forecastData, isHourly) {
     // Store all data sets in an array
     let dataSets = [forecastData1, forecastData2, forecastData3];
 
-    // Append the buttons to toggle between hourly forecast data
+    // Append the button to toggle between hourly forecast data
     if(!forecastBtnContainer.contains(toggleNextBtn)) {
       forecastBtnContainer.appendChild(toggleNextBtn);
-    }
-    if(!forecastBtnContainer.contains(togglePrevBtn)) {
-      forecastBtnContainer.appendChild(togglePrevBtn);
     }
 
     // Add a new div for each forecast
@@ -334,14 +337,6 @@ function displayForecast(forecastData, isHourly) {
       displayForecast(forecastData, isHourly);
     }
 
-    // Set up the click event handler for the previous button
-    togglePrevBtn.onclick = function() {
-      // Decrement the index of the current data set
-      currentDataSetIndex = (currentDataSetIndex - 1 + dataSets.length) % dataSets.length;
-
-      // Call displayForecast again to update the display
-      displayForecast(forecastData, isHourly);
-    }
     // If the forecast is not hourly (but daily)
   } else {
     // Add a new div for each forecast
@@ -349,15 +344,13 @@ function displayForecast(forecastData, isHourly) {
       forecastContainer.appendChild(createForecastElement(forecast, isHourly));
     });
 
-    // Remove the buttons for toggling between hourly forecast data
+    // Remove the button for toggling between hourly forecast data
     if(forecastBtnContainer.contains(toggleNextBtn)) {
       forecastBtnContainer.removeChild(toggleNextBtn);
     }
-    if(forecastBtnContainer.contains(togglePrevBtn)) {
-      forecastBtnContainer.removeChild(togglePrevBtn);
-    }
   }
 }
+
 
 
 // Function for performing the search
