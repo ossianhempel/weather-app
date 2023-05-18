@@ -10,7 +10,7 @@ const humidityDiv = document.querySelector('.current-humidity');
 const windDiv = document.querySelector('.current-wind');
 const forecastContainer = document.querySelector(".forecast-container");
 const forecastBtnContainer = document.querySelector('.daily-hourly-btn-container');
-const forecastHeader = document.querySelector('#forecasted-weather-header');
+// const forecastHeader = document.querySelector('#forecasted-weather-header');
 const searchErrorMessage = document.querySelector('.search-error-message');
 
 // Create button to toggle between hourly forecast data
@@ -18,7 +18,8 @@ const toggleHourlyForecastBtn = document.createElement('button');
 toggleHourlyForecastBtn.classList.add('toggle-hourly-forecast-btn');
 
 // Declare a variable to keep track of which hourly forecasted data set is currently displayed
-let isDisplayingFirstDataSet = true;  
+let currentDataSetIndex = 0;
+
 
 // ???
 let allData = {};
@@ -161,13 +162,14 @@ function getHourlyForecastData(locationQuery) {
     if (data.error) {
       throw new Error(data.error.message);
     }
-
+    console.log(data)
     const hourlyForecastData = [];
 
     // Loop through the hourly forecast data and extract the relevant information
     for (let i = 0; i < data.forecast.forecastday[0].hour.length; i++) {
       const hourlyData = data.forecast.forecastday[0].hour[i];
-      const hour = hourlyData.time; 
+      const date = hourlyData.time; 
+      const hour = date.split(" ")[1]; // Extract just the hour
       const temperature = hourlyData.temp_c; 
       const condition = hourlyData.condition.text;
       const iconUrl = hourlyData.condition.icon;
@@ -220,8 +222,9 @@ async function getAllData (locationQuery="London") {
 
     // Get hourly forecast data
     const hourlyForecastData = await getHourlyForecastData(locationQuery)
+    
     hourlyForecastData.forEach(hourly => {
-      const hour = hourly.hour; // Use 'hour' instead of 'time'
+      const hour = hourly.hour; 
       const condition = hourly.condition;
       const temperature = hourly.temperature;
       });
@@ -281,6 +284,16 @@ function createForecastElement(forecast, isHourly) {
   return forecastDiv;
 }
 
+// Create two buttons for toggling the data
+const toggleNextBtn = document.createElement('button');
+const togglePrevBtn = document.createElement('button');
+toggleNextBtn.textContent = 'Next';
+togglePrevBtn.textContent = 'Previous';
+
+// Add class to buttons for styling
+toggleNextBtn.classList.add('toggle-button');
+togglePrevBtn.classList.add('toggle-button');
+
 // Function that takes a list of forecasted data and creates a new div for each item in the list
 function displayForecast(forecastData, isHourly) {
 
@@ -289,48 +302,63 @@ function displayForecast(forecastData, isHourly) {
 
   // If the forecast is hourly, display hourly forecast
   if (isHourly) {
-    // Get the forecast from the current hour to 7 hours ahead
-    let forecastData1 = forecastData.slice(6, 16);
-    let forecastData2 = forecastData.slice(16, 24);
+    // Split the forecast data into three parts
+    let forecastData1 = forecastData.slice(0, 8);
+    let forecastData2 = forecastData.slice(8, 16);
+    let forecastData3 = forecastData.slice(16, 24);
 
-    // Change the forecasted data's header
-    forecastHeader.textContent = "Hourly forecast";
+    // Store all data sets in an array
+    let dataSets = [forecastData1, forecastData2, forecastData3];
 
-    // Append the button to toggle between hourly forecast data
-    if(!forecastBtnContainer.contains(toggleHourlyForecastBtn)) {
-      forecastBtnContainer.appendChild(toggleHourlyForecastBtn);
+    // Append the buttons to toggle between hourly forecast data
+    if(!forecastBtnContainer.contains(toggleNextBtn)) {
+      forecastBtnContainer.appendChild(toggleNextBtn);
+    }
+    if(!forecastBtnContainer.contains(togglePrevBtn)) {
+      forecastBtnContainer.appendChild(togglePrevBtn);
     }
 
     // Add a new div for each forecast
-    let dataToDisplay = isDisplayingFirstDataSet ? forecastData1 : forecastData2;
+    let dataToDisplay = dataSets[currentDataSetIndex];
+
     dataToDisplay.forEach(forecast => {
       forecastContainer.appendChild(createForecastElement(forecast, isHourly));
     });
 
-    // Set up the click event handler for the button
-    toggleHourlyForecastBtn.onclick = function() {
-      // Swap the value of isDisplayingFirstDataSet
-      isDisplayingFirstDataSet = !isDisplayingFirstDataSet;
+    // Set up the click event handler for the next button
+    toggleNextBtn.onclick = function() {
+      // Increment the index of the current data set
+      currentDataSetIndex = (currentDataSetIndex + 1) % dataSets.length;
       
       // Call displayForecast again to update the display
       displayForecast(forecastData, isHourly);
     }
+
+    // Set up the click event handler for the previous button
+    togglePrevBtn.onclick = function() {
+      // Decrement the index of the current data set
+      currentDataSetIndex = (currentDataSetIndex - 1 + dataSets.length) % dataSets.length;
+
+      // Call displayForecast again to update the display
+      displayForecast(forecastData, isHourly);
+    }
+    // If the forecast is not hourly (but daily)
   } else {
-
-    // Change the forecasted data's header
-    forecastHeader.textContent = "Daily forecast";
-
     // Add a new div for each forecast
     forecastData.forEach(forecast => {
       forecastContainer.appendChild(createForecastElement(forecast, isHourly));
     });
 
-    // Remove the button for toggling between hourly forecast data
-    if(forecastBtnContainer.contains(toggleHourlyForecastBtn)) {
-      forecastBtnContainer.removeChild(toggleHourlyForecastBtn);
+    // Remove the buttons for toggling between hourly forecast data
+    if(forecastBtnContainer.contains(toggleNextBtn)) {
+      forecastBtnContainer.removeChild(toggleNextBtn);
+    }
+    if(forecastBtnContainer.contains(togglePrevBtn)) {
+      forecastBtnContainer.removeChild(togglePrevBtn);
     }
   }
 }
+
 
 // Function for performing the search
 const searchWeather = (event) => {

@@ -7,6 +7,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 body, html {
   margin: 0;
   height: 100%;
+  box-sizing: border-box;
   /* font-family: 'Lato', sans-serif; */
 }
 
@@ -126,13 +127,15 @@ body, html {
   justify-content: center;
 
 
-
 }
 
 #forecasted-weather-container {
-  /* display: flex; */
-  border: 1px solid black;
-  /* margin: auto; */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid green;
+  width: 90%;
+  justify-content: end;
+  padding-bottom: 50px;
   
 }
 
@@ -142,6 +145,11 @@ body, html {
 
 .forecast-container {
   display: flex;
+  gap: 1vw;
+  border: 1px solid blue;
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
 
 }
 
@@ -149,5 +157,10 @@ body, html {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
-
+  height: 10vw;
+  width: 10vw;
 }
+
+
+
+/* ---------- Mobile version ---------- */
