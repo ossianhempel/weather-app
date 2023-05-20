@@ -8,12 +8,13 @@ body, html {
   margin: 0;
   height: 100%;
   box-sizing: border-box;
-  /* font-family: 'Lato', sans-serif; */
+  font-family: 'Lato', sans-serif;
 }
 
 /* Wrapper for the content */
 #wrapper {
   background-color: lightgray;
+  color: rgb(241, 241, 241);
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */
@@ -21,6 +22,11 @@ body, html {
   margin-left: auto;
   margin-right: auto;
   height: 100vh;
+/* <a href="https://www.freepik.com/free-ai-image/dramatic-white-clouds-blue-sky-from-airplane-window-view-colorful-sunset-cloudscape-background_39518250.htm#query=background&position=40&from_view=keyword&track=sph">Image by svstudioart</a> on Freepik */
+  background-image: url(images/dramatic-white-clouds-blue-sky-from-airplane-window-view-colorful-sunset-cloudscape-background.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 #upper-section {

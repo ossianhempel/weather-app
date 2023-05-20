@@ -3,7 +3,7 @@
 // Declaring element variables
 const locationDiv = document.querySelector('.location');
 const conditionDiv = document.querySelector('.current-condition');
-const weatherIconImg = document.querySelector('.weatherIcon');
+const currentWeatherIconImg = document.querySelector('.current-weather-icon');
 const temperatureDiv = document.querySelector('.current-temperature');
 const feelsLikeDiv = document.querySelector('.current-feels-like');
 const humidityDiv = document.querySelector('.current-humidity');
@@ -59,11 +59,11 @@ function getCurrentWeatherData(locationQuery) {
       if (data.error) {
         throw new Error(data.error.message);
       }
-      // console.log(data)
+      console.log(data)
       const condition = data.current.condition.text;
+      const iconUrl = "https:" + data.current.condition.icon;
       const country = data.location.country;
       const city = data.location.name;
-      const iconUrl = data.current.condition.icon;
       const currentTemp = data.current.temp_c;
       const feelsLikeC = data.current.feelslike_c;
       const humidity = data.current.humidity;
@@ -200,6 +200,7 @@ async function getAllData (locationQuery="London") {
     const feelsLike = currentWeatherData.feelsLike;
     const humidity = currentWeatherData.humidity;
     const wind = currentWeatherData.wind;
+    const iconUrl = currentWeatherData.iconUrl;
     
     // Display current weather data in the DOM
     locationDiv.textContent = `${city}, ${country}`;
@@ -208,6 +209,7 @@ async function getAllData (locationQuery="London") {
     feelsLikeDiv.textContent = `Feels like: ${feelsLike}°C`;
     humidityDiv.textContent = `Humidity: ${humidity}%`;
     windDiv.textContent = `Wind: ${wind} km/h`;
+    currentWeatherIconImg.src = iconUrl;
 
     
     // Get daily forecast data
