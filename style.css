@@ -17,7 +17,6 @@ body, html {
   color: rgb(241, 241, 241);
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -32,24 +31,21 @@ body, html {
 #upper-section {
   width: 100%;
   display: flex;
+  /* justify-content: center; */
   height: 33vh;
-  border: 1px solid black;
+  /* border: 1px solid green; */
 
 }
 
 #search-container {
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  align-items: center;
-  /* margin: auto; */
+  /* align-items: center; */
+  /* border: 1px solid red; */
+
 }
 
 #weather-form {
-  /* height: 50px;
-  width: 30px; */
-  /* border: 1px solid green; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,7 +77,7 @@ body, html {
   width: 100%;
   display: flex;
   height: 33vh;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 
 }
 
@@ -89,7 +85,7 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin: auto;
 }
 
@@ -114,7 +110,7 @@ body, html {
   flex-direction: column;
   justify-content: center;
   gap: 15px;
-  border-left: 1px solid black;
+  border-left: 1px solid rgb(241, 241, 241);
   margin: auto;
   padding-left: 20px;
   font-size: 20px;
@@ -129,32 +125,30 @@ body, html {
   width: 100%;
   display: flex;
   height: 33vh;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   justify-content: center;
-
-
 }
 
 #forecasted-weather-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid green;
+  /* border: 1px solid green; */
   width: 90%;
   justify-content: end;
   padding-bottom: 50px;
-  
 }
 
 .daily-hourly-btn-container {
   display: flex;
+  /* border: 1px solid red; */
 }
 
 .forecast-container {
   display: flex;
   gap: 1vw;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   margin-top: 20px;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   height: 15vh;
 
@@ -163,14 +157,18 @@ body, html {
 .forecast-element {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   height: 20vw;
   width: 15vw;
   max-width: 200px;
   max-height: 200px;
   justify-content: space-evenly;
   align-items: center;
+}
 
+.hourly-forecast-time, .daily-forecast-date {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .current-icon, .daily-forecast-icon, .hourly-forecast-icon {

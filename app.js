@@ -272,9 +272,6 @@ function createForecastElement(forecast, isHourly) {
   hourlyForecastTemperatureDiv.classList.add('hourly-forecast-temperature');
   hourlyForecastIconImg.classList.add('hourly-forecast-icon');
 
-
-
-
   // Add content to the div
   if (isHourly) {
     forecastDiv.appendChild(hourlyForecastTimeDiv);
@@ -360,8 +357,6 @@ function displayForecast(forecastData, isHourly) {
     }
   }
 }
-
-
 
 // Function for performing the search
 const searchWeather = (event) => {
