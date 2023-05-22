@@ -10,7 +10,6 @@ const humidityDiv = document.querySelector('.current-humidity');
 const windDiv = document.querySelector('.current-wind');
 const forecastContainer = document.querySelector(".forecast-container");
 const forecastBtnContainer = document.querySelector('.daily-hourly-btn-container');
-// const forecastHeader = document.querySelector('#forecasted-weather-header');
 const searchErrorMessage = document.querySelector('.search-error-message');
 
 // Create button to toggle between hourly forecast data
@@ -59,7 +58,6 @@ function getCurrentWeatherData(locationQuery) {
       if (data.error) {
         throw new Error(data.error.message);
       }
-      console.log(data)
       const condition = data.current.condition.text;
       const iconUrl = "https:" + data.current.condition.icon;
       const country = data.location.country;
@@ -121,7 +119,7 @@ function getDailyForecastData(locationQuery) {
         const maxTemp = forecastDay.day.maxtemp_c;
         const minTemp = forecastDay.day.mintemp_c;
         const condition = forecastDay.day.condition.text;
-        const iconUrl = forecastDay.day.condition.icon;
+        const iconUrl = "https:" + forecastDay.day.condition.icon;
 
         forecastData.push({
           date: date,
@@ -162,7 +160,6 @@ function getHourlyForecastData(locationQuery) {
     if (data.error) {
       throw new Error(data.error.message);
     }
-    console.log(data)
     const hourlyForecastData = [];
 
     // Loop through the hourly forecast data and extract the relevant information
@@ -172,7 +169,7 @@ function getHourlyForecastData(locationQuery) {
       const hour = date.split(" ")[1]; // Extract just the hour
       const temperature = hourlyData.temp_c; 
       const condition = hourlyData.condition.text;
-      const iconUrl = hourlyData.condition.icon;
+      const iconUrl = "https:" + hourlyData.condition.icon;
 
       hourlyForecastData.push({
         hour: hour,
@@ -201,6 +198,8 @@ async function getAllData (locationQuery="London") {
     const humidity = currentWeatherData.humidity;
     const wind = currentWeatherData.wind;
     const iconUrl = currentWeatherData.iconUrl;
+
+    currentWeatherIconImg.classList.add('current-icon');
     
     // Display current weather data in the DOM
     locationDiv.textContent = `${city}, ${country}`;
@@ -214,21 +213,22 @@ async function getAllData (locationQuery="London") {
     
     // Get daily forecast data
     const dailyForecastData = await getDailyForecastData(locationQuery);
-    dailyForecastData.forEach(forecast => {
-      const date = forecast.date;
-      const condition = forecast.condition;
-      const maxTemp = forecast.maxTemp;
-      const minTemp = forecast.minTemp;
+    dailyForecastData.forEach(daily => {
+      const date = daily.date;
+      const condition = daily.condition;
+      const maxTemp = daily.maxTemp;
+      const minTemp = daily.minTemp;
+      const iconUrl = daily.iconUrl;
       
     });
 
     // Get hourly forecast data
-    const hourlyForecastData = await getHourlyForecastData(locationQuery)
-    
+    const hourlyForecastData = await getHourlyForecastData(locationQuery);
     hourlyForecastData.forEach(hourly => {
       const hour = hourly.hour; 
       const condition = hourly.condition;
       const temperature = hourly.temperature;
+      const iconUrl = hourly.iconUrl;
       });
 
     // Return the fetched data
@@ -250,23 +250,27 @@ function createForecastElement(forecast, isHourly) {
   forecastDiv.classList.add('forecast-element');
 
   // Create sub-divs for the different weather attributes
-  // Hourly forecast
-  let hourlyForecastTimeDiv = document.createElement('div');
-  let hourlyForecastConditionDiv = document.createElement('div');
-  let hourlyForecastTemperatureDiv = document.createElement('div');
-  hourlyForecastTimeDiv.classList.add('hourly-forecast-time');
-  hourlyForecastConditionDiv.classList.add('hourly-forecast-condition');
-  hourlyForecastTemperatureDiv.classList.add('hourly-forecast-temperature');
-
   // Daily forecast
   let dailyForecastDateDiv = document.createElement('div');
   let dailyForecastConditionDiv = document.createElement('div');
   let dailyForecastMaxTemperatureDiv = document.createElement('div');
   let dailyForecastMinTemperatureDiv = document.createElement('div');
+  let dailyForecastIconImg = document.createElement('img');
   dailyForecastDateDiv.classList.add('daily-forecast-date');
   dailyForecastConditionDiv.classList.add('daily-forecast-condition');
   dailyForecastMaxTemperatureDiv.classList.add('daily-forecast-max-temperature');
   dailyForecastMinTemperatureDiv.classList.add('daily-forecast-min-temperature');
+  dailyForecastIconImg.classList.add('daily-forecast-icon');
+  
+  // Hourly forecast
+  let hourlyForecastTimeDiv = document.createElement('div');
+  let hourlyForecastConditionDiv = document.createElement('div');
+  let hourlyForecastTemperatureDiv = document.createElement('div');
+  let hourlyForecastIconImg = document.createElement('img');
+  hourlyForecastTimeDiv.classList.add('hourly-forecast-time');
+  hourlyForecastConditionDiv.classList.add('hourly-forecast-condition');
+  hourlyForecastTemperatureDiv.classList.add('hourly-forecast-temperature');
+  hourlyForecastIconImg.classList.add('hourly-forecast-icon');
 
 
 
@@ -276,19 +280,23 @@ function createForecastElement(forecast, isHourly) {
     forecastDiv.appendChild(hourlyForecastTimeDiv);
     forecastDiv.appendChild(hourlyForecastConditionDiv);
     forecastDiv.appendChild(hourlyForecastTemperatureDiv);
+    forecastDiv.appendChild(hourlyForecastIconImg);
     hourlyForecastTimeDiv.textContent = `${forecast.hour}`;
     hourlyForecastTemperatureDiv.textContent = `${forecast.temperature}°C`;
     hourlyForecastConditionDiv.textContent = `${forecast.condition}`;
+    hourlyForecastIconImg.src = forecast.iconUrl;
 
   } else {
     forecastDiv.appendChild(dailyForecastDateDiv);
     forecastDiv.appendChild(dailyForecastConditionDiv);
     forecastDiv.appendChild(dailyForecastMaxTemperatureDiv);
     forecastDiv.appendChild(dailyForecastMinTemperatureDiv);
+    forecastDiv.appendChild(dailyForecastIconImg);
     dailyForecastDateDiv.textContent = `${forecast.date}`;
     dailyForecastMaxTemperatureDiv.textContent = `${forecast.maxTemp}°C`;
     dailyForecastMinTemperatureDiv.textContent = `${forecast.minTemp}°C`;
     dailyForecastConditionDiv.textContent = `${forecast.condition}`;
+    dailyForecastIconImg.src = forecast.iconUrl;
   }
 
   // Return the new div element

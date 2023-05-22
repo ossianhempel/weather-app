@@ -156,6 +156,7 @@ body, html {
   margin-top: 20px;
   justify-content: center;
   align-items: center;
+  height: 15vh;
 
 }
 
@@ -163,13 +164,18 @@ body, html {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
-  height: 15vw;
+  height: 20vw;
   width: 15vw;
   max-width: 200px;
   max-height: 200px;
   justify-content: space-evenly;
   align-items: center;
 
+}
+
+.current-icon, .daily-forecast-icon, .hourly-forecast-icon {
+  height: 64px;
+  width: 64px;
 }
 
 
