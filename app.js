@@ -5,6 +5,7 @@ const locationDiv = document.querySelector('.location');
 const conditionDiv = document.querySelector('.current-condition');
 const currentWeatherIconImg = document.querySelector('.current-weather-icon');
 const temperatureDiv = document.querySelector('.current-temperature');
+const localTimeDiv = document.querySelector('.current-time');
 const feelsLikeDiv = document.querySelector('.current-feels-like');
 const humidityDiv = document.querySelector('.current-humidity');
 const windDiv = document.querySelector('.current-wind');
@@ -63,6 +64,7 @@ function getCurrentWeatherData(locationQuery) {
       const country = data.location.country;
       const city = data.location.name;
       const currentTemp = data.current.temp_c;
+      const localTime = data.location.localtime;
       const feelsLikeC = data.current.feelslike_c;
       const humidity = data.current.humidity;
       const windKph = data.current.wind_kph;
@@ -74,6 +76,7 @@ function getCurrentWeatherData(locationQuery) {
         city: city,
         iconUrl: iconUrl,
         currentTemp: currentTemp,
+        localTime: localTime,
         feelsLike: feelsLikeC,
         humidity: humidity,
         wind: windKph,
@@ -194,6 +197,7 @@ async function getAllData (locationQuery="London") {
     const country = currentWeatherData.country;
     const city = currentWeatherData.city;
     const currentTemp = currentWeatherData.currentTemp;
+    const localTime = currentWeatherData.localTime;
     const feelsLike = currentWeatherData.feelsLike;
     const humidity = currentWeatherData.humidity;
     const wind = currentWeatherData.wind;
@@ -205,6 +209,8 @@ async function getAllData (locationQuery="London") {
     locationDiv.textContent = `${city}, ${country}`;
     conditionDiv.textContent = `${condition}`;
     temperatureDiv.textContent = `${currentTemp}°C`;
+    // localTimeDiv.textContent = `${localTime}`;
+    localTimeDiv.textContent = formatLocalTime(localTime);
     feelsLikeDiv.textContent = `Feels like: ${feelsLike}°C`;
     humidityDiv.textContent = `Humidity: ${humidity}%`;
     windDiv.textContent = `Wind: ${wind} km/h`;
@@ -383,6 +389,43 @@ const searchWeather = (event) => {
       searchErrorMessage.style.display = 'block';
     });
 };
+
+// Function inspired by: https://taimoorsattar.com/blogs/javascript-date-format
+// Converts a date string from "yyyy-mm-dd hh:mm" format to "Day, dd Month 'yy h:mm a" format.
+function formatLocalTime(dateString) {
+  // Create a Date object from the string
+  const date = new Date(dateString);
+
+  // Array of day names
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  // Array of month names
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  // Get the day name
+  const day = days[date.getUTCDay()];
+
+  // Get the date number
+  const dateNumber = date.getUTCDate();
+
+  // Get the month name
+  const month = months[date.getUTCMonth()];
+
+  // Get the year, and convert it to a 2-digit string
+  const year = String(date.getUTCFullYear()).slice(-2);
+
+  // Get the hours and convert it to 12-hour format
+  let hours = date.getUTCHours();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = (hours % 12) + 2; // It's 2 hours behind for some reason
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  // Get the minutes and convert it to a 2-digit string
+  const minutes = ('0' + date.getUTCMinutes()).slice(-2);
+
+  // Return the formatted string
+  return `${day}, ${dateNumber} ${month} '${year} ${hours}:${minutes} ${ampm}`;
+}
 
 
 
