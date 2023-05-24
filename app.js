@@ -213,7 +213,7 @@ async function getAllData (locationQuery="London") {
     localTimeDiv.textContent = formatLocalTime(localTime);
     feelsLikeDiv.textContent = `Feels like: ${feelsLike}°C`;
     humidityDiv.textContent = `Humidity: ${humidity}%`;
-    windDiv.textContent = `Wind: ${wind} km/h`;
+    windDiv.textContent = `Wind: ${wind} kph`;
     currentWeatherIconImg.src = iconUrl;
 
     
