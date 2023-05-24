@@ -307,8 +307,13 @@ function createForecastElement(forecast, isHourly) {
 }
 
 // Create two buttons for toggling the data
-const toggleNextBtn = document.createElement('button');
-toggleNextBtn.textContent = 'Next';
+// const toggleNextBtn = document.createElement('button');
+// toggleNextBtn.textContent = 'Next';
+const toggleNextBtn = document.createElement('span');
+toggleNextBtn.classList.add('material-symbols-outlined');
+toggleNextBtn.textContent = "arrow_forward"
+{/* <span class="material-symbols-outlined">arrow_forward</span> */}
+
 
 // Add class to buttons for styling
 toggleNextBtn.classList.add('toggle-button');

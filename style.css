@@ -30,9 +30,7 @@ body, html {
 #upper-section {
   width: 100%;
   display: flex;
-  /* justify-content: center; */
   height: 33vh;
-  /* border: 1px solid green; */
 
 }
 
@@ -40,8 +38,7 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* align-items: center; */
-  border: 1px solid red;
+  /* border: 1px solid red; */
 
 }
 
@@ -50,7 +47,7 @@ body, html {
   justify-content: center;
   align-items: center;
   margin-top: 1vh;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 
 }
 
@@ -62,14 +59,15 @@ body, html {
   border: none;
   border-radius: 7px;
   min-width: 150px;
-  border: 1px solid yellow;
+  max-width: 300px;
+  /* border: 1px solid yellow; */
 }
 
 #search-button {
-  height: 30px;
-  width: 30px;
-
+  background: none;
+  border: none;
 }
+
 
 .search-error-message {
   display: none;
@@ -146,8 +144,23 @@ body, html {
 
 .daily-hourly-btn-container {
   display: flex;
+  gap: 5px;
   /* border: 1px solid red; */
 }
+
+#daily-btn, #hourly-btn {
+  background: none;
+  color: rgb(241, 241, 241);
+  border: none;
+  font-size: 16px;
+  height: 30px;
+  /* border: 1px solid green; */
+}
+
+#daily-btn:active, #hourly-btn:active {
+  border: 1px solid rgb(241, 241, 241);
+}
+
 
 .forecast-container {
   display: flex;
@@ -177,6 +190,20 @@ body, html {
 .hourly-forecast-time, .daily-forecast-date {
   font-size: 1.2em;
   font-weight: bold;
+}
+
+/* Imported Google Icon */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 40;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgb(241, 241, 241);  
+  font-size: 30px !important;  /* Use !important to overrule all other selectors */
+}
+
+.material-symbols-outlined:hover {
+  transform: scale(1.2); /* https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale */
 }
 
 .current-icon, .daily-forecast-icon, .hourly-forecast-icon {
