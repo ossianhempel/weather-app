@@ -47,8 +47,6 @@ body, html {
   justify-content: center;
   align-items: center;
   margin-top: 1vh;
-  /* border: 1px solid green; */
-
 }
 
 #search-location {
@@ -60,7 +58,8 @@ body, html {
   border-radius: 7px;
   min-width: 150px;
   max-width: 300px;
-  /* border: 1px solid yellow; */
+  padding-left: 10px;
+
 }
 
 #search-button {
@@ -154,13 +153,7 @@ body, html {
   border: none;
   font-size: 16px;
   height: 30px;
-  /* border: 1px solid green; */
 }
-
-#daily-btn:active, #hourly-btn:active {
-  border: 1px solid rgb(241, 241, 241);
-}
-
 
 .forecast-container {
   display: flex;
@@ -202,8 +195,14 @@ body, html {
   font-size: 30px !important;  /* Use !important to overrule all other selectors */
 }
 
-.material-symbols-outlined:hover {
-  transform: scale(1.2); /* https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale */
+.material-symbols-outlined:hover, #daily-btn:hover, #hourly-btn:hover {
+  transform: scale(1.1); /* https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale */
+}
+
+/* Use chaining selectors to increase specificity */
+#daily-btn.btn-active, #hourly-btn.btn-active {
+  border: 2px solid rgb(241, 241, 241); /* Style the button which is currently selected */
+  border-radius: 5px;
 }
 
 .current-icon, .daily-forecast-icon, .hourly-forecast-icon {

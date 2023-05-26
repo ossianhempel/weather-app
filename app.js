@@ -306,9 +306,7 @@ function createForecastElement(forecast, isHourly) {
   return forecastDiv;
 }
 
-// Create two buttons for toggling the data
-// const toggleNextBtn = document.createElement('button');
-// toggleNextBtn.textContent = 'Next';
+// Create button for toggling the data
 const toggleNextBtn = document.createElement('span');
 toggleNextBtn.classList.add('material-symbols-outlined');
 toggleNextBtn.textContent = "arrow_forward"
@@ -443,13 +441,21 @@ form.addEventListener('submit', searchWeather);
 
 
 // Event listener for the daily forecast button
-document.querySelector("#daily-btn").addEventListener("click", () => {
+dailyBtn = document.querySelector("#daily-btn")
+dailyBtn.addEventListener("click", () => {
   displayForecast(allData.dailyForecastData, false);
+  // Add the btn-active class to this button, remove it from the other
+  dailyBtn.classList.add("btn-active");
+  hourlyBtn.classList.remove("btn-active");
 });
 
 // Event listener for the hourly forecast button
-document.querySelector("#hourly-btn").addEventListener("click", () => {
+hourlyBtn = document.querySelector("#hourly-btn")
+hourlyBtn.addEventListener("click", () => {
   displayForecast(allData.hourlyForecastData, true);
+  // Add the btn-active class to this button, remove it from the other
+  hourlyBtn.classList.add("btn-active");
+  dailyBtn.classList.remove("btn-active");
 });
 
 // Default data on page load
