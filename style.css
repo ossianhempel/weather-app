@@ -213,3 +213,78 @@ body, html {
 
 
 /* ---------- Mobile version ---------- */
+@media screen and (max-width: 600px) {
+  #upper-section {
+    height: 10vh;
+    justify-content: center;
+  }
+  
+  #weather-form {
+    margin-top: 3vh;
+  }
+  
+  #search-location {
+    width: 30vw;
+  }
+  
+  .search-error-message {
+    margin-left: 0;
+  }
+  
+  #mid-section {
+    display: flex;
+    height: 33vh;
+  
+  }
+  
+  #current-weather-container {
+    padding: 20px;
+  }
+  
+  .current-condition {
+    font-size: 20px;
+  }
+  
+  .location {
+    font-size: 50px;
+  }
+  
+  .current-weather-container-lower-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    border-left: 1px solid rgb(241, 241, 241);
+    margin: auto;
+    padding-left: 20px;
+    font-size: 20px;
+  }
+  
+  .current-temperature {
+    font-size: 90px;
+  }
+  
+  #lower-section {
+    min-height: 33vh;
+    justify-content: center;
+  }
+  
+  #forecasted-weather-container {
+    width: 90%;
+    justify-content: end;
+    padding-bottom: 50px;
+  }
+  
+  
+  .forecast-container {
+    flex-wrap: wrap;
+    min-height: 15vh;
+  }
+  
+  .forecast-element {
+    align-items: space-evenly;
+    width: 25vw;
+    min-height: 25vw;
+    padding: 10px;
+  }
+}

@@ -12,6 +12,10 @@ const windDiv = document.querySelector('.current-wind');
 const forecastContainer = document.querySelector(".forecast-container");
 const forecastBtnContainer = document.querySelector('.daily-hourly-btn-container');
 const searchErrorMessage = document.querySelector('.search-error-message');
+const form = document.querySelector('#weather-form');
+const dailyBtn = document.querySelector("#daily-btn")
+const hourlyBtn = document.querySelector("#hourly-btn")
+
 
 // Create button to toggle between hourly forecast data
 const toggleHourlyForecastBtn = document.createElement('button');
@@ -436,12 +440,17 @@ function formatLocalTime(dateString) {
 
 
 // Add an event listener for the form submit event
-const form = document.querySelector('#weather-form');
-form.addEventListener('submit', searchWeather);
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  searchWeather(e);
+  dailyBtn.classList.add("btn-active"); // Resets the active button when a new query is done
+  hourlyBtn.classList.remove("btn-active"); 
+  currentDataSetIndex = 0; // Resets which hours are displayed in hourly forecast when a new query is done
+});
+
 
 
 // Event listener for the daily forecast button
-dailyBtn = document.querySelector("#daily-btn")
 dailyBtn.addEventListener("click", () => {
   displayForecast(allData.dailyForecastData, false);
   // Add the btn-active class to this button, remove it from the other
@@ -450,7 +459,6 @@ dailyBtn.addEventListener("click", () => {
 });
 
 // Event listener for the hourly forecast button
-hourlyBtn = document.querySelector("#hourly-btn")
 hourlyBtn.addEventListener("click", () => {
   displayForecast(allData.hourlyForecastData, true);
   // Add the btn-active class to this button, remove it from the other
