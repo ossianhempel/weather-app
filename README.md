@@ -17,7 +17,7 @@ This is a weather app that allows users to search for weather data for any locat
 ## Getting Started
 
 1. Clone the repository
-2. Open `index.html` in a web browser
+2. Open `index.html` in a web browser or visit https://ossianhempel.github.io/weather-app/ 
 3. Enter a location in the search bar and hit enter
 
 ## Usage

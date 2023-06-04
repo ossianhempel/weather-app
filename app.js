@@ -220,7 +220,6 @@ async function getAllData(locationQuery = "London") {
     locationDiv.textContent = `${city}, ${country}`;
     conditionDiv.textContent = `${condition}`;
     temperatureDiv.textContent = `${currentTemp}°C`;
-    // localTimeDiv.textContent = `${localTime}`;
     localTimeDiv.textContent = formatLocalTime(localTime);
     feelsLikeDiv.textContent = `Feels like: ${feelsLike}°C`;
     humidityDiv.textContent = `Humidity: ${humidity}%`;
