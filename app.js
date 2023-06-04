@@ -16,7 +16,6 @@ const form = document.querySelector('#weather-form');
 const dailyBtn = document.querySelector("#daily-btn")
 const hourlyBtn = document.querySelector("#hourly-btn")
 
-
 // Create button to toggle between hourly forecast data
 const toggleHourlyForecastBtn = document.createElement('button');
 toggleHourlyForecastBtn.classList.add('toggle-hourly-forecast-btn');
@@ -24,25 +23,26 @@ toggleHourlyForecastBtn.classList.add('toggle-hourly-forecast-btn');
 // Declare a variable to keep track of which hourly forecasted data set is currently displayed
 let currentDataSetIndex = 0;
 
-
-// ???
+// Declare an object for the data to be pulled
 let allData = {};
 
+// I mainly used these resources from The Odin Project to learn about fetch(), promises and their associated
+// methods used for working with external APIs:
+// https://www.theodinproject.com/lessons/node-path-javascript-working-with-apis
+// https://www.theodinproject.com/lessons/nodejs-api-basics
 
-// API Key generated from Weather API: https://www.weatherapi.com/
+// The API for weather data used in this program is delivered by https://www.weatherapi.com/ 
+// Information about what data is available and syntax can be found on the website
+
+
+// API Key generated from Weather API
 const apiKey = 'c9743f30e57d4c16b27210100230105';
 
-
-// TODO Reference The Odin Project
-
-
-
-// Get current weather data
 function getCurrentWeatherData(locationQuery) {
-  /**
-   * Documentation
-   * 
-   * 
+  /*
+   * Takes a location query and creates an API endpoint for it
+   * Uses fetch() to make an HTTP request to the endpoint which returns a promise
+   * If no errors, current weather data is assigned to variables and returned as an object
    */
 
   // URL for accessing the API
@@ -57,14 +57,15 @@ function getCurrentWeatherData(locationQuery) {
       }
       return response.json();
     })
-    // Assigning parsed data points of interest to variables
     .then(data => {
       // Check if the response contains an error message
       if (data.error) {
         throw new Error(data.error.message);
       }
+      
+      // Extract relevant data points from the API response
       const condition = data.current.condition.text;
-      const iconUrl = "https:" + data.current.condition.icon;
+      const iconUrl = "https:" + data.current.condition.icon; // Weather icons (images)
       const country = data.location.country;
       const city = data.location.name;
       const currentTemp = data.current.temp_c;
@@ -85,17 +86,17 @@ function getCurrentWeatherData(locationQuery) {
         humidity: humidity,
         wind: windKph,
       };
-    })
+    });
 }
 
 
-// Get daily forecasted data
 function getDailyForecastData(locationQuery) {
-
-  /**
-   * Documentation
-   * 
-   *  
+  /*
+   * Takes a location query and creates an API endpoint for it
+   * Uses fetch() to make an HTTP request to the endpoint which returns a promise
+   * If no errors, creates an array to store extracted daily forecast data
+   * Loops through the forecast days and extracts relevant data for each day
+   * Each day's data is returned as a separate object within the array
    */
 
   // URL for accessing the API
@@ -117,6 +118,7 @@ function getDailyForecastData(locationQuery) {
         throw new Error(data.error.message);
       }
       
+      // Create an array to store the forecast data
       const forecastData = [];
 
       // Loop through the forecast days and extract the relevant data
@@ -128,6 +130,7 @@ function getDailyForecastData(locationQuery) {
         const condition = forecastDay.day.condition.text;
         const iconUrl = "https:" + forecastDay.day.condition.icon;
 
+        // Create an object for each day's data and add it to the array
         forecastData.push({
           date: date,
           maxTemp: maxTemp,
@@ -137,16 +140,18 @@ function getDailyForecastData(locationQuery) {
         });
       }
 
+      // Return the forecast data array
       return forecastData;
-    })
-};
+    });
+}
 
-// Get hourly forecasted data
 function getHourlyForecastData(locationQuery) {
-  /**
-   * Documentation
-   * 
-   * 
+  /*
+   * Takes a location query and creates an API endpoint for it
+   * Uses fetch() to make an HTTP request to the endpoint which returns a promise
+   * If no errors, creates an array to store extracted hourly forecast data
+   * Loops through the hourly forecast data and extracts relevant information for each hour
+   * Each hour's data is returned as a separate object within the array
    */
 
   // URL for accessing the API with hourly forecast
@@ -154,45 +159,47 @@ function getHourlyForecastData(locationQuery) {
 
   // Make API call that returns a promise created by fetch
   return fetch(endpoint, { mode: 'cors' })
-  .then(response => {
-    // Check if the fetch request was successful
-    if (!response.ok) {
-      throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
-    }
-    return response.json();
-  })
-  .then(data => {
+    .then(response => {
+      // Check if the fetch request was successful
+      if (!response.ok) {
+        throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Check if the response contains an error message
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
 
-    // Check if the response contains an error message
-    if (data.error) {
-      throw new Error(data.error.message);
-    }
-    const hourlyForecastData = [];
+      // Create an array to store the hourly forecast data
+      const hourlyForecastData = [];
 
-    // Loop through the hourly forecast data and extract the relevant information
-    for (let i = 0; i < data.forecast.forecastday[0].hour.length; i++) {
-      const hourlyData = data.forecast.forecastday[0].hour[i];
-      const date = hourlyData.time; 
-      const hour = date.split(" ")[1]; // Extract just the hour
-      const temperature = hourlyData.temp_c; 
-      const condition = hourlyData.condition.text;
-      const iconUrl = "https:" + hourlyData.condition.icon;
+      // Loop through the hourly forecast data and extract the relevant information
+      for (let i = 0; i < data.forecast.forecastday[0].hour.length; i++) {
+        const hourlyData = data.forecast.forecastday[0].hour[i];
+        const date = hourlyData.time;
+        const hour = date.split(" ")[1]; // Extract just the hour
+        const temperature = hourlyData.temp_c;
+        const condition = hourlyData.condition.text;
+        const iconUrl = "https:" + hourlyData.condition.icon;
 
-      hourlyForecastData.push({
-        hour: hour,
-        temperature: temperature, 
-        condition: condition,
-        iconUrl: iconUrl,
-      });
-    }
+        // Create an object for each hour's data and add it to the array
+        hourlyForecastData.push({
+          hour: hour,
+          temperature: temperature,
+          condition: condition,
+          iconUrl: iconUrl,
+        });
+      }
 
-    return hourlyForecastData;
-  })
-};
-
+      // Return the hourly forecast data array
+      return hourlyForecastData;
+    });
+}
 
 // Call all data-collection functions for a query
-async function getAllData (locationQuery="London") {
+async function getAllData(locationQuery = "London") {
   // Error handling within the function
   try {
     // Get current weather data
@@ -207,8 +214,8 @@ async function getAllData (locationQuery="London") {
     const wind = currentWeatherData.wind;
     const iconUrl = currentWeatherData.iconUrl;
 
-    currentWeatherIconImg.classList.add('current-icon');
-    
+    currentWeatherIconImg.classList.add("current-icon");
+
     // Display current weather data in the DOM
     locationDiv.textContent = `${city}, ${country}`;
     conditionDiv.textContent = `${condition}`;
@@ -220,26 +227,24 @@ async function getAllData (locationQuery="London") {
     windDiv.textContent = `Wind: ${wind} kph`;
     currentWeatherIconImg.src = iconUrl;
 
-    
     // Get daily forecast data
     const dailyForecastData = await getDailyForecastData(locationQuery);
-    dailyForecastData.forEach(daily => {
+    dailyForecastData.forEach((daily) => {
       const date = daily.date;
       const condition = daily.condition;
       const maxTemp = daily.maxTemp;
       const minTemp = daily.minTemp;
       const iconUrl = daily.iconUrl;
-      
     });
 
     // Get hourly forecast data
     const hourlyForecastData = await getHourlyForecastData(locationQuery);
-    hourlyForecastData.forEach(hourly => {
-      const hour = hourly.hour; 
+    hourlyForecastData.forEach((hourly) => {
+      const hour = hourly.hour;
       const condition = hourly.condition;
       const temperature = hourly.temperature;
       const iconUrl = hourly.iconUrl;
-      });
+    });
 
     // Return the fetched data
     return {
@@ -247,13 +252,12 @@ async function getAllData (locationQuery="London") {
       dailyForecastData: dailyForecastData,
       hourlyForecastData: hourlyForecastData,
     };
-    }
-    catch (error) {
-      console.error(`Error: ${error}`);
-    }
-};
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
 
-// Function that takes a list of forecasted data and creates a new div displaying it's attributes
+// Function that takes a list of forecasted data and creates a new div displaying its attributes
 function createForecastElement(forecast, isHourly) {
   // Create a new div element
   let forecastDiv = document.createElement("div");
@@ -284,21 +288,27 @@ function createForecastElement(forecast, isHourly) {
 
   // Add content to the div
   if (isHourly) {
+    // Append sub-divs for hourly forecast attributes
     forecastDiv.appendChild(hourlyForecastTimeDiv);
     forecastDiv.appendChild(hourlyForecastConditionDiv);
     forecastDiv.appendChild(hourlyForecastTemperatureDiv);
     forecastDiv.appendChild(hourlyForecastIconImg);
+    
+    // Set the content of sub-divs for hourly forecast attributes
     hourlyForecastTimeDiv.textContent = `${forecast.hour}`;
     hourlyForecastTemperatureDiv.textContent = `${forecast.temperature}°C`;
     hourlyForecastConditionDiv.textContent = `${forecast.condition}`;
     hourlyForecastIconImg.src = forecast.iconUrl;
 
   } else {
+    // Append sub-divs for daily forecast attributes
     forecastDiv.appendChild(dailyForecastDateDiv);
     forecastDiv.appendChild(dailyForecastConditionDiv);
     forecastDiv.appendChild(dailyForecastMaxTemperatureDiv);
     forecastDiv.appendChild(dailyForecastMinTemperatureDiv);
     forecastDiv.appendChild(dailyForecastIconImg);
+    
+    // Set the content of sub-divs for daily forecast attributes
     dailyForecastDateDiv.textContent = `${forecast.date}`;
     dailyForecastMaxTemperatureDiv.textContent = `${forecast.maxTemp}°C`;
     dailyForecastMinTemperatureDiv.textContent = `${forecast.minTemp}°C`;
@@ -313,9 +323,7 @@ function createForecastElement(forecast, isHourly) {
 // Create button for toggling the data
 const toggleNextBtn = document.createElement('span');
 toggleNextBtn.classList.add('material-symbols-outlined');
-toggleNextBtn.textContent = "arrow_forward"
-{/* <span class="material-symbols-outlined">arrow_forward</span> */}
-
+toggleNextBtn.textContent = "arrow_forward";
 
 // Add class to buttons for styling
 toggleNextBtn.classList.add('toggle-button');
@@ -398,8 +406,9 @@ const searchWeather = (event) => {
 };
 
 // Function inspired by: https://taimoorsattar.com/blogs/javascript-date-format
-// Converts a date string from "yyyy-mm-dd hh:mm" format to "Day, dd Month 'yy h:mm a" format.
+// Converts a date string from "yyyy-mm-dd hh:mm" format to "Day, dd Month 'yy h:mm a" format
 function formatLocalTime(dateString) {
+  
   // Create a Date object from the string
   const date = new Date(dateString);
 
@@ -474,6 +483,6 @@ getAllData()
       displayForecast(allData.dailyForecastData, false);
     })
     .catch(error => {
+      // Display an error message in the UI
       console.error(`Failed to fetch weather data: ${error}`);
-      // potentially display an error message in the UI here
     });
